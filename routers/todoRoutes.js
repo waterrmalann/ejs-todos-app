@@ -1,5 +1,6 @@
 import express from 'express';
 import { preventIfNotLoggedIn } from '../middlewares/authMiddleware.js';
+import { deleteTodos, getTodos, postTodos, putTodos } from '../controllers/todoController.js';
 
 const router = express.Router();
 
