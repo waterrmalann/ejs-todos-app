@@ -1,8 +1,13 @@
 import User from '../models/User.js';
-import { validateMailAddress } from "../helpers/validators";
+import { validateMailAddress } from "../helpers/validators.js";
 
-const getLogin = async (_req, res) => {
-    res.render('login');
+const getLogin = async (req, res) => {
+    if (req.session.userJustRegisteredAnAccount) {
+        req.session.userJustRegisteredAnAccount = false;
+        res.render('login', { userJustRegisteredAnAccount: true });
+    } else {
+        res.render('login');
+    }
 };
 
 const postLogin = async (req, res) => {
@@ -31,22 +36,23 @@ const postRegister = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!email || !validateMailAddress(email)) {
-        return res.status(400).render("register", { errorMessage: "invalid email address" });
+        return res.status(400).render("register", { errorCode: 400, errorMessage: "invalid email address" });
     }
 
     if (!name) {
-        return res.status(400).render("register", { errorMessage: "invalid name" });
+        return res.status(400).render("register", { errorCode: 400, errorMessage: "invalid name" });
     }
 
     if (!password || password.length < 8) {
-        return res.status(400).render("register", { errorMessage: "invalid password" });
+        return res.status(400).render("register", { errorCode: 400, errorMessage: "invalid password" });
     }
 
     try {
         await User.create({ name, email, password });
-        res.redirect('/login?registered=true');
+        req.session.userJustRegisteredAnAccount = true;
+        res.redirect('/login');
     } catch (err) {
-        res.status(500).render("register", { errorMessage: "An internal server error occured." })
+        res.status(500).render("register", { errCode: 500, errorMessage: "An internal server error occured." })
     }
 }
 
@@ -54,7 +60,7 @@ const getLogout = async (req, res) => {
     // Clear the session or token upon logout
     req.session.destroy((err) => {
         if (err) {
-            return res.status(500).render("error", { errorMessage: "An error occured while you were logging out." });
+            return res.status(500).render("error", { errCode: 500, errorMessage: "An error occured while you were logging out." });
         }
         res.redirect('/login');
     });
