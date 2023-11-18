@@ -63,7 +63,7 @@
                     return;
                 }
 
-                if (!email) {
+                if (!email || !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
                     document.querySelector('#error-' + e.target.email.id).innerText = "invalid email";
                     return;
                 }
