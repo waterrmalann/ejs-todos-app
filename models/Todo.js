@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const todoSchema = mongoose.Schema({
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     content: {
         type: String,
         required: true

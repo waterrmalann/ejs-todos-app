@@ -1,9 +1,9 @@
 import Todo from '../models/Todo.js';
 
-const getTodos = async (_req, res) => {
+const getTodos = async (req, res) => {
     try {
-        const todos = await Todo.find();
-        res.status(200).json(todos);
+        const todos = await Todo.find({ createdBy: req.session.user._id });
+        res.status(200).render('todos', { todos });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -17,7 +17,7 @@ const postTodos = async (req, res) => {
     }
 
     try {
-        const newTodo = await Todo.create({ content });
+        const newTodo = await Todo.create({ createdBy: req.session.user._id, content });
         res.status(201).json(newTodo);
     } catch (err) {
         res.status(500).json({ error: err.message });
