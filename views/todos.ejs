@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Todos :: Login</title>
+        <link rel="stylesheet" href="/styles/style.css"/>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="topbar">
+                <h1>Todos</h1>
+                <a href="/logout"><button class="logout-button">Log Out</button></a>
+                </div>
+                <h1>Good Morning, Alan</h1>
+                <form id="createTodoForm" class="todo-form" action="/todos" method="post">
+                    <div class="todo-input" >
+                        <input type="text" name="content" id="content" placeholder="Enter a task..." />
+                        <button type="submit" class="todo__button">Add</button>
+                    </div>
+                    <span id="error-content" class="error-msg"></span>
+                </form>
+                <p class="server-error-msg align-center">A server side error occured while trying to process this request.</p>
+
+                <% if (locals.todos.length === 0) { %>
+                    <p>No todos, create one by using the input above.</p>
+                <% } else { %>
+                    <ul>
+                        <% locals.todos.forEach(element => { %>
+                            <li data-id="<%= element._id %>" class="todo-item <%= element.completed ? "checked" : "" %>">
+                                <input 
+                                    type="checkbox" 
+                                    <%= element.completed && "checked" %>
+                                />
+                                <span><%= element.content %></span>
+                                <span><i>E</i><i>D</i></span>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+            </div>
+            <script>
+                document.getElementById('createTodoForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    document.querySelector('error-msg').innerText = '';
+
+                    const content = e.target.content.value.trim();
+                    if (!content || content.length < 1) {
+                        document.querySelector('#error-' + e.target.content.id).innerText = "please enter valid text."
+                        return;
+                    }
+
+                    try {
+                        const request = await fetch("/todos", { method: "POST", body: JSON.stringify({ content })});
+                        if (request.ok) {
+                            const li = document.createElement('li');
+                            li.innerText = content;
+                        }
+                    }catch (err) {
+                        
+                    }
+
+                })
+                document.querySelectorAll('todo-item').forEach(elem => {
+                    elem.querySelector('input[type="checkbox"]').addEventListener('change', async (e) => {
+                        try {
+                            const res = await fetch("/todos", { method: "PUT", body: JSON.stringify({ completed: e.target.checked }) });
+                            if (res.ok) {
+                                console.log("[Response<OK>]");
+                            } else {
+                                console.log("[Respose<NOT OK>]");
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            window.location.reload();
+                            alert("A network error occured.");
+                        }
+                    })
+                });
+            </script>
+    </body>
+</html>

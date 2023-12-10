@@ -3,7 +3,7 @@ import Todo from '../models/Todo.js';
 const getTodos = async (req, res) => {
     try {
         const todos = await Todo.find({ createdBy: req.session.user._id });
-        res.status(200).render('todos', { todos });
+        res.status(200).render('todos', { todos, name: req.session.user.name });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

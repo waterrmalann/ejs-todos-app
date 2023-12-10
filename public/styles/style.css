@@ -33,7 +33,9 @@ label {
 	font-size: 1rem;
 }
 
-input[type="email"], input[type="password"], input[type="text"] {
+input[type="email"],
+input[type="password"],
+input[type="text"] {
 	width: 100%;
 	display: block;
 	padding: 0.75rem;
@@ -42,7 +44,9 @@ input[type="email"], input[type="password"], input[type="text"] {
 	box-shadow: 2px 2px var(--shadow-clr);
 }
 
-a, a:visited, a:active {
+a,
+a:visited,
+a:active {
 	text-decoration: inherit;
 	color: inherit;
 }
@@ -169,4 +173,87 @@ button:disabled {
 .split {
 	display: flex;
 	gap: 2rem;
+}
+
+/* TODOS PAGE SPECIFIC */
+.topbar {
+	margin-block: 3rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.checked {
+	text-decoration: line-through;
+	color: gray;
+	display: flex;
+	align-items: center;
+}
+
+.logout-button {
+	font-size: 1rem;
+	border-radius: .25rem;
+	border: 1px solid rgba(14, 14, 14, 0.25);
+	background: transparent;
+	box-shadow: 4px 4px rgba(14, 14, 14);
+	padding: 0.25rem .5rem;
+	min-width: 5rem;
+	transition: ease-in-out 0.25s;
+}
+
+.logout-button:hover {
+	cursor: pointer;
+	font-weight: bold;
+	transition: ease-in-out 0.25s;
+}
+
+.todo-form {
+	margin-block: 2rem;
+}
+
+.todo-input {
+	display: flex;
+	gap: 1rem;
+}
+
+.todo__button {
+	font-size: 1rem;
+	border-radius: .25rem;
+	border: 1px solid rgba(14, 14, 14, 0.25);
+	background: transparent;
+	box-shadow: 4px 4px rgba(14, 14, 14);
+	min-width: 4rem;
+	transition: ease-in-out 0.25s;
+}
+
+.todo__button:hover {
+	cursor: pointer;
+	font-weight: bold;
+	transition: ease-in-out 0.25s;
+}
+
+ul {
+	padding-left: 0;
+	margin-left: 0;
+}
+
+ul>li {
+	list-style: square;
+	margin-block: 1rem;
+	font-weight: bold;
+	list-style: none;
+	display: flex;
+}
+
+ul li>span:first-child {
+	display: flex;
+	justify-content: space-between;
+}
+
+input[type="checkbox"] {
+	vertical-align: middle;
+	width: 20px;
+	height: 20px;
+	filter: grayscale(100%);
+	margin-right: 1rem;
 }
